@@ -70,7 +70,8 @@ func (h *Handler) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 	post, err := h.PostService.UpdatePost(r.Context(), post, id)
 	if err != nil {
-		log.Println(err)
+		log.Println("ERROR", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	if err := json.NewEncoder(w).Encode(post); err != nil {

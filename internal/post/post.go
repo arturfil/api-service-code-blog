@@ -63,6 +63,7 @@ func (s *Service) CreatePost(ctx context.Context, post Post) (Post, error) {
 func (s *Service) UpdatePost(ctx context.Context, post Post, id string) (Post, error) {
 	post, err := s.Store.UpdatePost(ctx, post, id)
 	if err != nil {
+		fmt.Print("ERROR", err)
 		return Post{}, nil
 	}
 	return post, nil

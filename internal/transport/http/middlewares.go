@@ -18,11 +18,9 @@ func JSONMiddleware(next http.Handler) http.Handler {
 func CorsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Get("Content-Type")
-		w.Header().Add("Access-Control-Allow-Headers", "Content-Type,AccessToken,Accept,X-CSRF-Token,Authorization,Token,Origin")
-		w.Header().Add("Access-Control-Allow-Credentials", "true")
-		w.Header().Add("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE")
-		w.Header().Set("Content-type", "application/json;charset=UTF-8")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers:", "Origin, Content-Type, X-Auth-Token, Authorization")
+		w.Header().Set("Content-Type", "application/json")
 		next.ServeHTTP(w, r)
 	})
 }

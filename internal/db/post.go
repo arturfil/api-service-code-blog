@@ -104,11 +104,12 @@ func (d *Database) CreatePost(ctx context.Context, post post.Post) (post.Post, e
 
 func (d *Database) UpdatePost(ctx context.Context, post post.Post, id string) (post.Post, error) {
 	query := `
-		update posts set 
-		title = $1, 
-		author = $2, 
-		content = $3, 
-		category = $4
+		update posts 
+		set 
+			title = $1, 
+			author = $2, 
+			content = $3, 
+			category = $4
 		where id = $5
 	`
 
