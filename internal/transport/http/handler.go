@@ -37,9 +37,9 @@ func NewHandler(post_service PostService) *Handler {
 
 func (h *Handler) mapRoutes() {
 	h.Router.HandleFunc("/api/v1/posts", h.GetPosts).Methods("GET")
-	h.Router.HandleFunc("/api/v1/posts/post", h.CreatePost).Methods("POST")
+	h.Router.HandleFunc("/api/v1/posts/post", JWTAuh(h.CreatePost)).Methods("POST")
 	h.Router.HandleFunc("/api/v1/posts/post/{id}", h.GetPostById).Methods("GET")
-	h.Router.HandleFunc("/api/v1/posts/post/{id}", h.UpdatePost).Methods("PUT")
+	h.Router.HandleFunc("/api/v1/posts/post/{id}", h.UpdatePost).Methods("PUT", "OPTIONS")
 }
 
 func (h *Handler) Serve() error {

@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/arturfil/go_code_blog_api/internal/post"
+	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
 )
 
@@ -47,17 +48,42 @@ func (h *Handler) GetPostById(w http.ResponseWriter, r *http.Request) {
 	w.Write(encjson)
 }
 
+type CreatePostRequest struct {
+	Title    string `json:"title" validate:"required"`
+	Author   string `json:"author" validate:"required"`
+	Content  string `json:"content" validate:"required"`
+	Category string `json:"category" validate:"required"`
+}
+
+func convertPostRequestToPost(p CreatePostRequest) post.Post {
+	return post.Post{
+		Title:    p.Title,
+		Author:   p.Author,
+		Content:  p.Content,
+		Category: p.Category,
+	}
+}
+
 func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
-	var post post.Post
+	var post CreatePostRequest
 	if err := json.NewDecoder(r.Body).Decode(&post); err != nil {
 		return
 	}
-	post, err := h.PostService.CreatePost(r.Context(), post)
+	validate := validator.New()
+	err := validate.Struct(post)
+	if err != nil {
+		http.Error(w, "not a valid post", http.StatusBadRequest)
+		return
+	}
+
+	convertedPost := convertPostRequestToPost(post)
+	createdPost, err := h.PostService.CreatePost(r.Context(), convertedPost)
+
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	if err := json.NewEncoder(w).Encode(post); err != nil {
+	if err := json.NewEncoder(w).Encode(createdPost); err != nil {
 		panic(err)
 	}
 }
