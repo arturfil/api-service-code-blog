@@ -14,12 +14,14 @@ import (
 type Handler struct {
 	Router      *mux.Router
 	PostService PostService
+	UserService UserService
 	Server      *http.Server
 }
 
-func NewHandler(post_service PostService) *Handler {
+func NewHandler(post_service PostService, user_service UserSerice) *Handler {
 	h := &Handler{
 		PostService: post_service,
+		UserService: user_service,
 	}
 
 	h.Router = mux.NewRouter()
@@ -36,6 +38,10 @@ func NewHandler(post_service PostService) *Handler {
 }
 
 func (h *Handler) mapRoutes() {
+	// auth/user Routes
+	h.Router.HandleFunc("/api/v1/auth/signup", h.Signup).Methods("POST")
+
+	// Post Routes
 	h.Router.HandleFunc("/api/v1/posts", h.GetPosts).Methods("GET")
 	h.Router.HandleFunc("/api/v1/posts/post", JWTAuh(h.CreatePost)).Methods("POST")
 	h.Router.HandleFunc("/api/v1/posts/post/{id}", h.GetPostById).Methods("GET")

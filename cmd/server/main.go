@@ -6,6 +6,7 @@ import (
 	"github.com/arturfil/go_code_blog_api/internal/db"
 	"github.com/arturfil/go_code_blog_api/internal/post"
 	transportHttp "github.com/arturfil/go_code_blog_api/internal/transport/http"
+	"github.com/arturfil/go_code_blog_api/internal/user"
 )
 
 // Run - is going to be responsible for the
@@ -24,8 +25,9 @@ func Run() error {
 	}
 
 	postService := post.NewService(db)
+	userService := user.NewService(db)
 
-	postHandler := transportHttp.NewHandler(postService)
+	postHandler := transportHttp.NewHandler(postService, userService)
 
 	if err := postHandler.Serve(); err != nil {
 		return err
