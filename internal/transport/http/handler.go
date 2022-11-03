@@ -18,7 +18,7 @@ type Handler struct {
 	Server      *http.Server
 }
 
-func NewHandler(post_service PostService, user_service UserSerice) *Handler {
+func NewHandler(post_service PostService, user_service UserService) *Handler {
 	h := &Handler{
 		PostService: post_service,
 		UserService: user_service,
@@ -40,6 +40,7 @@ func NewHandler(post_service PostService, user_service UserSerice) *Handler {
 func (h *Handler) mapRoutes() {
 	// auth/user Routes
 	h.Router.HandleFunc("/api/v1/auth/signup", h.Signup).Methods("POST")
+	h.Router.HandleFunc("/api/v1/auth/login", h.Login).Methods("POST")
 
 	// Post Routes
 	h.Router.HandleFunc("/api/v1/posts", h.GetPosts).Methods("GET")
