@@ -16,6 +16,7 @@ type UserRow struct {
 	FirstName string    `json:"first_name,omitempty"`
 	LastName  string    `json:"last_name,omitempty"`
 	Password  string    `json:"password"`
+	Clearance string    `json:"clearance"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -28,14 +29,15 @@ func (d *Database) Signup(ctx context.Context, user user.User) (user.User, error
 		return user, err
 	}
 	query := `
-		insert into users (id, email, first_name, last_name, password, created_at, updated_at)
-		values ($1, $2, $3, $4, $5, $6, $7) returning id;
+		insert into users (id, email, first_name, last_name, clearance, password, created_at, updated_at)
+		values ($1, $2, $3, $4, $5, $6, $7, $8) returning id;
 	`
 	err = d.Client.QueryRowContext(ctx, query,
 		newId,
 		user.Email,
 		user.FirstName,
 		user.LastName,
+		"member",
 		hashedPassword,
 		time.Now(),
 		time.Now(),

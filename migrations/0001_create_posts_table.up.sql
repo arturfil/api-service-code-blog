@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   "first_name" varchar NOT NULL,
   "last_name" varchar NOT NULL,
   "email" varchar UNIQUE NOT NULL,
+  "clearance" varchar,
   "password" varchar NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "updated_at" timestamptz NOT NULL DEFAULT (now())

@@ -29,11 +29,11 @@ func (d *Database) MigrateDB() error {
 	}
 
 	// TODO: UNCOMMENT THIS TO DELETE OLD DB
-	// if err := m.Down(); err != nil {
-	// 	if !errors.Is(err, migrate.ErrNoChange) {
-	// 		return fmt.Errorf("could not run DOWN migrations")
-	// 	}
-	// }
+	if err := m.Down(); err != nil {
+		if !errors.Is(err, migrate.ErrNoChange) {
+			return fmt.Errorf("could not run DOWN migrations")
+		}
+	}
 
 	if err := m.Up(); err != nil {
 		if !errors.Is(err, migrate.ErrNoChange) {
