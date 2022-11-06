@@ -42,7 +42,7 @@ func (h *Handler) mapRoutes() {
 	h.Router.HandleFunc("/api/v1/auth/login", h.Login).Methods("POST")
 
 	// Post Routes
-	h.Router.HandleFunc("/api/v1/posts", JWTAuth(h.GetPosts)).Methods("GET", "OPTIONS")
+	h.Router.HandleFunc("/api/v1/posts", h.GetPosts).Methods("GET", "OPTIONS")
 	h.Router.HandleFunc("/api/v1/posts/post", JWTAuth(h.CreatePost)).Methods("POST", "OPTIONS")
 	h.Router.HandleFunc("/api/v1/posts/post/{id}", h.GetPostById).Methods("GET", "OPTIONS")
 	h.Router.HandleFunc("/api/v1/posts/post/{id}", JWTAuth(h.UpdatePost)).Methods("PUT", "OPTIONS")

@@ -25,6 +25,7 @@ func CorsMiddleware(next http.Handler) http.Handler {
 		w.Header().Add("Access-Control-Allow-Headers", "Authorization")
 		w.Header().Add("Content-Type", "application/json; charset=UTF-8")
 		if r.Method == "OPTIONS" {
+			// CHECK: https://asanchez.dev/blog/cors-golang-options/
 			w.WriteHeader(http.StatusOK)
 		}
 		next.ServeHTTP(w, r)
