@@ -84,8 +84,6 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		Token: tokenString,
 		User:  userToLogIn,
 	}
-	log.Print("Response -> ", response)
-	// return json
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		panic(err)
 	}
