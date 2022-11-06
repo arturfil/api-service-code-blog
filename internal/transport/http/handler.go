@@ -26,7 +26,7 @@ func NewHandler(post_service PostService, user_service UserService) *Handler {
 	h.Router = mux.NewRouter()
 	h.mapRoutes()
 	h.Router.Use(CorsMiddleware)
-	// h.Router.Use(JSONMiddleware)
+	h.Router.Use(JSONMiddleware)
 	h.Router.Use(LogginMiddleware)
 	h.Router.Use(TimeOutMiddleware)
 	h.Server = &http.Server{
@@ -42,7 +42,7 @@ func (h *Handler) mapRoutes() {
 	h.Router.HandleFunc("/api/v1/auth/login", h.Login).Methods("POST")
 
 	// Post Routes
-	h.Router.HandleFunc("/api/v1/posts", h.GetPosts).Methods("GET", "OPTIONS")
+	h.Router.HandleFunc("/api/v1/posts", JWTAuth(h.GetPosts)).Methods("GET", "OPTIONS")
 	h.Router.HandleFunc("/api/v1/posts/post", JWTAuth(h.CreatePost)).Methods("POST", "OPTIONS")
 	h.Router.HandleFunc("/api/v1/posts/post/{id}", h.GetPostById).Methods("GET", "OPTIONS")
 	h.Router.HandleFunc("/api/v1/posts/post/{id}", JWTAuth(h.UpdatePost)).Methods("PUT", "OPTIONS")
