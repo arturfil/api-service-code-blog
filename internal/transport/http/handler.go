@@ -38,8 +38,9 @@ func NewHandler(post_service PostService, user_service UserService) *Handler {
 
 func (h *Handler) mapRoutes() {
 	// auth/user Routes
-	h.Router.HandleFunc("/api/v1/auth/signup", h.Signup).Methods("POST")
-	h.Router.HandleFunc("/api/v1/auth/login", h.Login).Methods("POST")
+	h.Router.HandleFunc("/api/v1/auth/signup", h.Signup).Methods("POST", "OPTIONS")
+	h.Router.HandleFunc("/api/v1/auth/login", h.Login).Methods("POST", "OPTIONS")
+	h.Router.HandleFunc("/api/v1/auth/delete/{id}", JWTAuth(h.DeleteUser)).Methods("DELETE", "OPTIONS")
 
 	// Post Routes
 	h.Router.HandleFunc("/api/v1/posts", h.GetPosts).Methods("GET", "OPTIONS")

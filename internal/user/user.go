@@ -21,6 +21,7 @@ type UserStore interface {
 	Signup(context.Context, User) (User, error)
 	GetUserByEmail(context.Context, string) (User, error)
 	PasswordMatches(string, User) (bool, error)
+	DeleteUser(context.Context, string) (bool, error)
 }
 
 type Service struct {
@@ -65,4 +66,13 @@ func (s *Service) PasswordMatches(plainText string, user User) (bool, error) {
 		return false, nil
 	}
 	return isValid, nil
+}
+
+func (s *Service) DeleteUser(ctx context.Context, id string) (bool, error) {
+	_, err := s.Store.DeleteUser(ctx, id)
+	if err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+	return true, nil
 }

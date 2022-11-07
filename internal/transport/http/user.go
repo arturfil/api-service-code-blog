@@ -11,6 +11,7 @@ import (
 
 	"github.com/arturfil/go_code_blog_api/internal/user"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/gorilla/mux"
 )
 
 type credentials struct {
@@ -28,6 +29,7 @@ type UserService interface {
 	// Login(ctx context.Context, email string) (user.User, error)
 	GetUserByEmail(ctx context.Context, email string) (user.User, error)
 	PasswordMatches(plainText string, user user.User) (bool, error)
+	DeleteUser(ctx context.Context, id string) (bool, error)
 }
 
 func (h *Handler) Signup(w http.ResponseWriter, r *http.Request) {
@@ -86,5 +88,14 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		panic(err)
+	}
+}
+
+func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	_, err := h.UserService.DeleteUser(r.Context(), id)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 }

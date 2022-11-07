@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/arturfil/go_code_blog_api/internal/user"
@@ -70,6 +71,16 @@ func (d *Database) GetUserByEmail(ctx context.Context, email string) (user.User,
 		return user, err
 	}
 	return user, nil
+}
+
+func (d *Database) DeleteUser(ctx context.Context, id string) (bool, error) {
+	query := `delete from users where id = $1`
+	err := d.Client.QueryRowContext(ctx, query, id)
+	if err != nil {
+		log.Println(err)
+		return false, nil
+	}
+	return true, nil
 }
 
 func (d *Database) PasswordMatches(plainText string, user user.User) (bool, error) {
